@@ -328,7 +328,7 @@ extends CordovaPlugin {
             return;
         }*/
 
-        if(content.contains("test123")
+        if(content.contains("test123"))
         {
             this.lastFrom = from;
             this.lastContent = content;
