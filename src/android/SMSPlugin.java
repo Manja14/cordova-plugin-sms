@@ -327,9 +327,17 @@ extends CordovaPlugin {
         /*if (from.equals(this.lastFrom) && content.equals(this.lastContent)) {
             return;
         }*/
-        this.lastFrom = from;
-        this.lastContent = content;
-        this.fireEvent("onSMSArrive", json);
+
+        if(content.contains("test123")
+        {
+            this.lastFrom = from;
+            this.lastContent = content;
+            this.fireEvent("onSMSArrive", json);
+        }
+        else
+        {
+            return;
+        }
     }
 
     protected void createIncomingSMSReceiver() {
