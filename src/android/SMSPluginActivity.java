@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.json.JSONObject;
 
-public class SMSluginActivity extends Activity {
+public class SMSPluginActivity extends Activity {
     private static String TAG = "SMSPlugin";
 
     /*

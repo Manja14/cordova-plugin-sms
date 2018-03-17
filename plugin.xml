@@ -22,13 +22,13 @@
     <!-- android -->
     <platform name="android">
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:exported="true" android:name="com.rjfun.cordova.sms.SMSluginActivity" android:launchMode="singleTop">
+			<activity android:exported="true" android:name="com.rjfun.cordova.sms.SMSPluginActivity" android:launchMode="singleTop">
 				<intent-filter>   
 					<action android:name="SMS_PLUGIN_ACTIVITY" />  
 					<category android:name="android.intent.category.DEFAULT" />
 				</intent-filter>			
 			</activity>
-			<receiver android:name="com.rjfun.cordova.sms.SmsReceiver">
+			<receiver android:name="com.rjfun.cordova.sms.SMSReceiver">
 				<intent-filter>
 					<action android:name="android.provider.Telephony.SMS_RECEIVED" />
 				</intent-filter>
@@ -52,6 +52,8 @@
           </config-file>
           
 		<source-file src="src/android/SMSPlugin.java" target-dir="src/com/rjfun/cordova/sms"/>
+		<source-file src="src/android/SMSPluginActivity.java" target-dir="src/com/rjfun/cordova/sms"/>
+		<source-file src="src/android/SMSReceiver.java" target-dir="src/com/rjfun/cordova/sms"/>
     </platform>
 
 </plugin>

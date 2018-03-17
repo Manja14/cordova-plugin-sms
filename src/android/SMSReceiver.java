@@ -11,7 +11,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-public class SmsReceiver extends BroadcastReceiver
+public class SMSReceiver extends BroadcastReceiver
 {
     private static String TAG = "SmsReceiver";
 
