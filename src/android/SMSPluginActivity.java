@@ -29,15 +29,14 @@ public class SMSPluginActivity extends Activity {
         super.onCreate(savedInstanceState);
 		Log.d(TAG, "==> SMSPluginActivity onCreate");
 		
-		JSONObject json = new JSONObject();
+		
         if (getIntent().getExtras() != null) {
-            json = getIntent().getExtras();
-			Log.d(TAG, "==> SMS RECEIVED");
-			data.put("navCoords", json);
+            String tmp = intent.getStringExtra("navCoords");
+            Log.d(TAG, "==> SMS RECEIVED");
+            JSONObject json = new JSONObject(tmp);
+            SMSPlugin.onSMSArrive(json);
         }
 		
-        SMSPlugin.onSMSArrive(json);
-
         finish();
 
         forceMainActivityReload();
