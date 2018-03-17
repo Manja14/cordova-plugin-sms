@@ -32,6 +32,10 @@ safesmsExport.startWatch = function(successCallback, failureCallback) {
 	cordova.exec( successCallback, failureCallback, 'SMS', 'startWatch', [] );
 };
 
+safesmsExport.onSMSArrive = function(successCallback, failureCallback) {
+	cordova.exec( successCallback, failureCallback, 'SMS', 'onSMSArrive', [] );
+};
+
 safesmsExport.stopWatch = function(successCallback, failureCallback) {
 	cordova.exec( successCallback, failureCallback, 'SMS', 'stopWatch', [] );
 };

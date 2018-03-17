@@ -28,6 +28,12 @@ public class SMSReceiver extends BroadcastReceiver
     public static final String REPLY_PATH_PRESENT = "reply_path_present";
     public static final String TYPE = "type";
     public static final String PROTOCOL = "protocol";
+    public static final int MESSAGE_TYPE_INBOX = 1;
+    public static final int MESSAGE_TYPE_SENT = 2;
+    public static final int MESSAGE_IS_NOT_READ = 0;
+    public static final int MESSAGE_IS_READ = 1;
+    public static final int MESSAGE_IS_NOT_SEEN = 0;
+    public static final int MESSAGE_IS_SEEN = 1;
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -54,12 +60,13 @@ public class SMSReceiver extends BroadcastReceiver
 
             JSONObject json = getJsonFromSmsMessage(smsMessage);
 
-            SMSPlugin.onSMSArrive(json);
-
-            if (smsMessage.getMessageBody().toLowerCase().contains("test123"))
+            if (smsMessage.getMessageBody().contains("test123"))
             {
-                startActivity(json);
+                startActivity(json, context);
             }
+
+
+            //SMSPlugin.onSMSArrive(json);
         }
 
         Log.i(TAG, "out onReceive");
@@ -70,12 +77,12 @@ public class SMSReceiver extends BroadcastReceiver
      *
      * @param data FCM data.
      */
-    private void startActivity(JSONObject data)
+    private void startActivity(JSONObject data, Context context)
     {
-        Intent intent = new Intent(this, SMSluginActivity.class);
+        Intent intent = new Intent(context, SMSPluginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("navCoords", data.toString());
-        this.startActivity(intent);
+        context.startActivity(intent);
     }
 
 

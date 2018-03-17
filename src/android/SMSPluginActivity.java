@@ -13,6 +13,8 @@ import android.util.Log;
 
 import java.util.Map;
 import java.util.HashMap;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SMSPluginActivity extends Activity {
@@ -27,14 +29,18 @@ public class SMSPluginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		Log.d(TAG, "==> SMSPluginActivity onCreate");
-		
-		
+        Log.d(TAG, "==> SMSPluginActivity onCreate");
+        
         if (getIntent().getExtras() != null) {
             String tmp = getIntent().getStringExtra("navCoords");
             Log.d(TAG, "==> SMS RECEIVED");
-            JSONObject json = new JSONObject(tmp);
-            SMSPlugin.onSMSArrive(json);
+            try {
+                JSONObject json = new JSONObject(tmp);
+                SMSPlugin.onSMSArrive(json);
+            }
+            catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+            }  
         }
 		
         finish();
@@ -51,7 +57,7 @@ public class SMSPluginActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-		Log.d(TAG, "==> SMSPluginActivity onResume");
+        Log.d(TAG, "==> SMSPluginActivity onResume");
     }
 	
 	@Override
