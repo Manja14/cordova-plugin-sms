@@ -15,6 +15,20 @@ public class SMSReceiver extends BroadcastReceiver
 {
     private static String TAG = "SmsReceiver";
 
+    public static final String BOX = "box";
+    public static final String ADDRESS = "address";
+    public static final String BODY = "body";
+    public static final String READ = "read";
+    public static final String SEEN = "seen";
+    public static final String SUBJECT = "subject";
+    public static final String SERVICE_CENTER = "service_center";
+    public static final String DATE = "date";
+    public static final String DATE_SENT = "date_sent";
+    public static final String STATUS = "status";
+    public static final String REPLY_PATH_PRESENT = "reply_path_present";
+    public static final String TYPE = "type";
+    public static final String PROTOCOL = "protocol";
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -58,9 +72,9 @@ public class SMSReceiver extends BroadcastReceiver
      */
     private void startActivity(JSONObject data)
     {
-        Intent intent = new Intent(this, FCMPluginActivity.class);
+        Intent intent = new Intent(this, SMSluginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("navCoords", data);
+        intent.putExtra("navCoords", data.toString());
         this.startActivity(intent);
     }
 

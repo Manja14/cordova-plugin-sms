@@ -31,7 +31,7 @@ public class SMSPluginActivity extends Activity {
 		
 		
         if (getIntent().getExtras() != null) {
-            String tmp = intent.getStringExtra("navCoords");
+            String tmp = getIntent().getStringExtra("navCoords");
             Log.d(TAG, "==> SMS RECEIVED");
             JSONObject json = new JSONObject(tmp);
             SMSPlugin.onSMSArrive(json);
