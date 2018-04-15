@@ -55,6 +55,7 @@
 		<source-file src="src/android/SMSPlugin.java" target-dir="src/com/rjfun/cordova/sms"/>
 		<source-file src="src/android/SMSPluginActivity.java" target-dir="src/com/rjfun/cordova/sms"/>
 		<source-file src="src/android/SMSReceiver.java" target-dir="src/com/rjfun/cordova/sms"/>
+		<source-file src="src/android/MySQLiteHelper.java" target-dir="src/com/hmkcode/android/sqlite/MySQLiteHelper"/>
     </platform>
 
 </plugin>
