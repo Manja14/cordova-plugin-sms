@@ -11,6 +11,10 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
+import com.hmkcode.android.sqlite.MySQLiteHelper;
+
 public class SMSReceiver extends BroadcastReceiver
 {
     private static String TAG = "SmsReceiver";
@@ -40,6 +44,10 @@ public class SMSReceiver extends BroadcastReceiver
     {
         Log.i(TAG, "in onReceive");
 
+        MySQLiteHelper db = new MySQLiteHelper(context);
+        List<String> phoneNumbers = db.getAllRecords("phoneNumbers", 1);
+        List<String> keywords = db.getAllRecords("keywords", 2);
+
         Bundle bundle = intent.getExtras();
         if (bundle != null)
         {
@@ -60,16 +68,51 @@ public class SMSReceiver extends BroadcastReceiver
 
             JSONObject json = getJsonFromSmsMessage(smsMessage);
 
-            if (smsMessage.getMessageBody().contains("test123"))
+            String incommingNumber = smsMessage.getOriginatingAddress();
+            Log.d(TAG, "==> Incoming number: " + incommingNumber);
+
+            for(String number : phoneNumbers)
             {
-                startActivity(json, context);
+                if(checkIfNumbersMatch(number, incommingNumber))
+                {
+                    Log.d(TAG, "==> numbers match");
+                    for(String element : keywords)
+                    {
+                        if (smsMessage.getMessageBody().startsWith(element))
+                        {
+                            startActivity(json, context);
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
-
-
             //SMSPlugin.onSMSArrive(json);
         }
 
         Log.i(TAG, "out onReceive");
+    }
+
+    private boolean checkIfNumbersMatch(String firstNumber, String secondNumber)
+    {
+        Log.d(TAG, "==> firstNumber " + firstNumber);
+        Log.d(TAG, "==> secondNumber " + secondNumber);
+
+        int firstInd = firstNumber.length() - 1;
+        int secondInd = secondNumber.length() - 1;
+
+        for(int i = 0; i < 8; i++)
+        {
+            if(firstNumber.charAt(firstInd) != secondNumber.charAt(secondInd))
+            {
+                return false;
+            }
+
+            firstInd--;
+            secondInd--;
+        }
+
+        return true;
     }
 
     /**

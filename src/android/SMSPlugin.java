@@ -31,6 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.hmkcode.android.sqlite.MySQLiteHelper;
+
 public class SMSPlugin extends CordovaPlugin {
     private static final String LOGTAG = "SMSPlugin";
     
@@ -95,7 +97,7 @@ public class SMSPlugin extends CordovaPlugin {
         Log.i(LOGTAG, "initialize");
 		super.initialize(cordova, webView);
 		gWebView = webView;
-		Log.d(LOGTAG, "==> SMSlugin initialize");
+        Log.d(LOGTAG, "==> SMSlugin initialize");
 	}
 
     public boolean execute(String action, JSONArray inputs, final CallbackContext callbackContext) throws JSONException {
@@ -176,24 +178,17 @@ public class SMSPlugin extends CordovaPlugin {
             String from = json.optString(ADDRESS);
             String content = json.optString(BODY);
 
-            if(content.contains("test123"))
+
+            String js = String.format("javascript:cordova.fireDocumentEvent(\"%s\", {\"data\":%s});", "onSMSArrive", json);
+            if(SMSCallBackReady && gWebView != null)
             {
-                Log.i(LOGTAG, "test123");
-                String js = String.format("javascript:cordova.fireDocumentEvent(\"%s\", {\"data\":%s});", "onSMSArrive", json);
-                if(SMSCallBackReady && gWebView != null)
-                {
-                    Log.d(LOGTAG, "\tSent Message to view: " + js);
-                    gWebView.sendJavascript(js);
-                }
-                else
-                {
-                    Log.d(LOGTAG, "\tView not ready. SAVED Message: " + js);
-                    lastMessage = json;
-                }
+                Log.d(LOGTAG, "\tSent Message to view: " + js);
+                gWebView.sendJavascript(js);
             }
             else
             {
-                return;
+                Log.d(LOGTAG, "\tView not ready. SAVED Message: " + js);
+                lastMessage = json;
             }
         } catch (Exception e) {
             Log.d(LOGTAG, "\tERROR onSMSArrive. SAVED Message: " + e.getMessage());
