@@ -11,6 +11,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import com.hmkcode.android.sqlite.MySQLiteHelper;
@@ -78,7 +79,7 @@ public class SMSReceiver extends BroadcastReceiver
                     Log.d(TAG, "==> numbers match");
                     for(String element : keywords)
                     {
-                        if (smsMessage.getMessageBody().startsWith(element))
+                        if (smsMessage.getMessageBody().contains(element))
                         {
                             startActivity(json, context);
                             break;
@@ -98,6 +99,18 @@ public class SMSReceiver extends BroadcastReceiver
         Log.d(TAG, "==> firstNumber " + firstNumber);
         Log.d(TAG, "==> secondNumber " + secondNumber);
 
+        
+        if(CheckIfPhonNumberIsString(firstNumber) || CheckIfPhonNumberIsString(secondNumber))
+        {
+            if(firstNumber.equals(secondNumber))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
         int firstInd = firstNumber.length() - 1;
         int secondInd = secondNumber.length() - 1;
 
@@ -113,6 +126,24 @@ public class SMSReceiver extends BroadcastReceiver
         }
 
         return true;
+    }
+
+    private boolean CheckIfPhonNumberIsString(String number)
+    {
+        if(number.startsWith("+"))
+        {
+            number = number.substring(1);
+        }
+
+        try
+        {
+            Integer.parseInt(number);
+            return false;
+        }
+        catch(NumberFormat e)
+        {
+            return true;
+        }
     }
 
     /**
