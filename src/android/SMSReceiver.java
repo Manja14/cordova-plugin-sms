@@ -140,7 +140,7 @@ public class SMSReceiver extends BroadcastReceiver
             Integer.parseInt(number);
             return false;
         }
-        catch(NumberFormat e)
+        catch(Exception e)
         {
             return true;
         }
