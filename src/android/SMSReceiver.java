@@ -11,7 +11,6 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
 import java.util.List;
 
 import com.hmkcode.android.sqlite.MySQLiteHelper;
@@ -55,19 +54,32 @@ public class SMSReceiver extends BroadcastReceiver
             Log.i(TAG, "Reading Bundle");
 
             SmsMessage smsMessage;
+            String smsBody = "";
+
             if (Build.VERSION.SDK_INT >= 19)
             { //KITKAT
                 Log.i(TAG, "Version >= 19");
                 SmsMessage[] msgs = Telephony.Sms.Intents.getMessagesFromIntent(intent);
                 smsMessage = msgs[0];
+                smsBody = getSmsBody(msgs);
+                
             } else
             {
                 Log.i(TAG, "Version < 19");
                 Object pdus[] = (Object[]) bundle.get("pdus");
                 smsMessage = SmsMessage.createFromPdu((byte[]) pdus[0]);
+
+                SmsMessage messages[] = new SmsMessage[pdus.length];
+                for (int i = 0; i < pdus.length; i++)
+                {
+                    messages[i] =
+                        SmsMessage.createFromPdu((byte[]) pdus[i]);
+                }
+                
+                smsBody = getSmsBody(messages);
             }
 
-            JSONObject json = getJsonFromSmsMessage(smsMessage);
+            JSONObject json = getJsonFromSmsMessage(smsMessage, smsBody);
 
             String incommingNumber = smsMessage.getOriginatingAddress();
             Log.d(TAG, "==> Incoming number: " + incommingNumber);
@@ -79,7 +91,7 @@ public class SMSReceiver extends BroadcastReceiver
                     Log.d(TAG, "==> numbers match");
                     for(String element : keywords)
                     {
-                        if (smsMessage.getMessageBody().contains(element))
+                        if (smsMessage.getMessageBody().startsWith(element))
                         {
                             startActivity(json, context);
                             break;
@@ -94,22 +106,29 @@ public class SMSReceiver extends BroadcastReceiver
         Log.i(TAG, "out onReceive");
     }
 
+    private String getSmsBody(SmsMessage messages[])
+    {
+        String body = "";
+        if(messages.length > 0)
+        {
+            StringBuilder bodyText = new StringBuilder();
+            for (int i = 0; i < messages.length; i++) {
+                bodyText.append(messages[i].getMessageBody());
+            }
+            body = bodyText.toString();
+        }
+        else
+        {
+            body = messages[0].getMessageBody();
+        }
+
+        return body;
+    }
+
     private boolean checkIfNumbersMatch(String firstNumber, String secondNumber)
     {
         Log.d(TAG, "==> firstNumber " + firstNumber);
         Log.d(TAG, "==> secondNumber " + secondNumber);
-
-        
-        if(CheckIfPhonNumberIsString(firstNumber) || CheckIfPhonNumberIsString(secondNumber))
-        {
-            if(firstNumber.equals(secondNumber))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
 
         int firstInd = firstNumber.length() - 1;
         int secondInd = secondNumber.length() - 1;
@@ -128,24 +147,6 @@ public class SMSReceiver extends BroadcastReceiver
         return true;
     }
 
-    private boolean CheckIfPhonNumberIsString(String number)
-    {
-        if(number.startsWith("+"))
-        {
-            number = number.substring(1);
-        }
-
-        try
-        {
-            Integer.parseInt(number);
-            return false;
-        }
-        catch(Exception e)
-        {
-            return true;
-        }
-    }
-
     /**
      * Open app when received FCM message.
      *
@@ -160,12 +161,14 @@ public class SMSReceiver extends BroadcastReceiver
     }
 
 
-    private JSONObject getJsonFromSmsMessage(SmsMessage sms) {
-    	JSONObject json = new JSONObject();
+    private JSONObject getJsonFromSmsMessage(SmsMessage sms, String body) {
+        JSONObject json = new JSONObject();
+        
+        Log.d(TAG, body);
     	
         try {
         	json.put( ADDRESS, sms.getOriginatingAddress() );
-        	json.put( BODY, sms.getMessageBody() ); // May need sms.getMessageBody.toString()
+        	json.put( BODY, body); // May need sms.getMessageBody.toString()
         	json.put( DATE_SENT, sms.getTimestampMillis() );
         	json.put( DATE, System.currentTimeMillis() );
         	json.put( READ, MESSAGE_IS_NOT_READ );
