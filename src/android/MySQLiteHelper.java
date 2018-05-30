@@ -78,4 +78,45 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         // return books
         return records;
     }
+
+    public void savePhoneNumber(String phoneNumber)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("phoneNumber", phoneNumber);
+
+        db.insert("phoneNumbers", null, values);
+    }
+
+    public void removePhoneNumber(String phoneNumber)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        
+        String selection = "phoneNumber LIKE ?";
+        String[] selectionArgs = { phoneNumber };
+
+        int deletedRows = db.delete("phoneNumbers", selection, selectionArgs);
+    }
+
+    public void saveKeyword(String keywordId, String keyword)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("keywordId", keywordId);
+        values.put("keyword", keyword);
+
+        db.insert("keywords", null, values);
+    }
+
+    public void removeKeyword(String keywordId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        
+        String selection = "keywordId LIKE ?";
+        String[] selectionArgs = { keywordId };
+        
+        int deletedRows = db.delete("keywords", selection, selectionArgs);
+    }
 }
