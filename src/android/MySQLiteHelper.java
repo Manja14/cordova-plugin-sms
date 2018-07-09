@@ -24,6 +24,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create phoneNumbers table
+        String interventionsQuery = "CREATE TABLE IF NOT EXISTS activeInterventions ( " +
+                "rowid INTEGER PRIMARY KEY, " + 
+                "interventionId TEXT)";
+ 
+        // create phoneNumbers table
+        db.execSQL(interventionsQuery);
+
+        // SQL statement to create phoneNumbers table
         String phoneNumbersQuery = "CREATE TABLE IF NOT EXISTS phoneNumbers ( " +
                 "rowid INTEGER PRIMARY KEY, " + 
                 "phoneNumber TEXT)";
@@ -44,6 +52,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older tables if existed
+        db.execSQL("DROP TABLE IF EXISTS activeInterventions");
         db.execSQL("DROP TABLE IF EXISTS phoneNumbers");
         db.execSQL("DROP TABLE IF EXISTS keywords");
  
