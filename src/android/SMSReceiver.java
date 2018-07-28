@@ -89,9 +89,16 @@ public class SMSReceiver extends BroadcastReceiver
                 if(checkIfNumbersMatch(number, incommingNumber))
                 {
                     Log.d(TAG, "==> numbers match");
+
+                    if(keywords == null || keywords.length == 0)
+                    {
+                        startActivity(json, context);
+                        break;
+                    }
+
                     for(String element : keywords)
                     {
-                        if (smsMessage.getMessageBody().startsWith(element))
+                        if (smsMessage.getMessageBody().contains(element))
                         {
                             startActivity(json, context);
                             break;
