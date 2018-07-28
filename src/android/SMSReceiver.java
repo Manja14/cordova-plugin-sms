@@ -163,6 +163,7 @@ public class SMSReceiver extends BroadcastReceiver
     {
         Intent intent = new Intent(context, SMSPluginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("navCoords", data.toString());
         context.startActivity(intent);
     }
