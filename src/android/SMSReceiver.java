@@ -90,7 +90,7 @@ public class SMSReceiver extends BroadcastReceiver
                 {
                     Log.d(TAG, "==> numbers match");
 
-                    if(keywords == null || keywords.length == 0)
+                    if(keywords == null || keywords.size() == 0)
                     {
                         startActivity(json, context);
                         break;
