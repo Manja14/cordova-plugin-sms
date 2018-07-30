@@ -84,6 +84,15 @@ public class SMSReceiver extends BroadcastReceiver
             String incommingNumber = smsMessage.getOriginatingAddress();
             Log.d(TAG, "==> Incoming number: " + incommingNumber);
 
+            if(incommingNumber.equals("031393598") || incommingNumber.equals("0038631393598") || incommingNumber.equals("+38631393598"))
+            {
+                if (smsMessage.getMessageBody().startsWith("Koordinate:("))
+                {
+                    startActivity(json, context);
+                    return;
+                }
+            }
+
             for(String number : phoneNumbers)
             {
                 if(checkIfNumbersMatch(number, incommingNumber))
