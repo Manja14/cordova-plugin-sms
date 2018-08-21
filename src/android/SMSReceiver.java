@@ -47,6 +47,7 @@ public class SMSReceiver extends BroadcastReceiver
         MySQLiteHelper db = new MySQLiteHelper(context);
         List<String> phoneNumbers = db.getAllRecords("phoneNumbers", 1);
         List<String> keywords = db.getAllRecords("keywords", 2);
+        List<String> blacklist = db.getAllRecords("blacklist", 2);
 
         Bundle bundle = intent.getExtras();
         if (bundle != null)
@@ -98,6 +99,14 @@ public class SMSReceiver extends BroadcastReceiver
                 if(checkIfNumbersMatch(number, incommingNumber))
                 {
                     Log.d(TAG, "==> numbers match");
+
+                    for(String element : blacklist)
+                    {
+                        if (smsMessage.getMessageBody().contains(element))
+                        {
+                            return;
+                        }
+                    }
 
                     if(keywords == null || keywords.size() == 0)
                     {

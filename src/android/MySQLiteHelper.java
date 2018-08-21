@@ -47,6 +47,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
  
         // create phoneNumbers table
         db.execSQL(keywordsQuery);
+
+        // SQL statement to create keywords table
+        String blacklistQuery = "CREATE TABLE IF NOT EXISTS blacklist ( " +
+                "rowid INTEGER PRIMARY KEY, " + 
+                "keywordId TEXT, " +
+                "keyword TEXT)";
+ 
+        // create phoneNumbers table
+        db.execSQL(blacklistQuery);
     }
  
     @Override
@@ -55,6 +64,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS activeInterventions");
         db.execSQL("DROP TABLE IF EXISTS phoneNumbers");
         db.execSQL("DROP TABLE IF EXISTS keywords");
+        db.execSQL("DROP TABLE IF EXISTS blacklist");
  
         // create fresh tables
         this.onCreate(db);
@@ -127,5 +137,26 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String[] selectionArgs = { keywordId };
         
         int deletedRows = db.delete("keywords", selection, selectionArgs);
+    }
+
+    public void saveBlacklistKeyword(String keywordId, String keyword)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("keywordId", keywordId);
+        values.put("keyword", keyword);
+
+        db.insert("blacklist", null, values);
+    }
+
+    public void removeBlacklisKeyword(String keywordId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        
+        String selection = "keywordId LIKE ?";
+        String[] selectionArgs = { keywordId };
+        
+        int deletedRows = db.delete("blacklist", selection, selectionArgs);
     }
 }
