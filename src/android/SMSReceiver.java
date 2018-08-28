@@ -85,6 +85,17 @@ public class SMSReceiver extends BroadcastReceiver
             String incommingNumber = smsMessage.getOriginatingAddress();
             Log.d(TAG, "==> Incoming number: " + incommingNumber);
 
+            long sentDate = smsMessage.getTimestampMillis();
+            long currentTimeStamp = System.currentTimeMillis();
+            long diff = currentTimeStamp - sentDate;
+            long diffMinutes = diff / (1000 * 60);
+            Log.d(TAG, "==> Time to receive sms: " + diffMinutes);
+
+            if(diffMinutes > 20)
+            {
+                return;
+            }
+
             if(incommingNumber.equals("031393598") || incommingNumber.equals("0038631393598") || incommingNumber.equals("+38631393598"))
             {
                 if (smsMessage.getMessageBody().startsWith("Koordinate:("))
