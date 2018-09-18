@@ -166,21 +166,28 @@ public class SMSReceiver extends BroadcastReceiver
         Log.d(TAG, "==> firstNumber " + firstNumber);
         Log.d(TAG, "==> secondNumber " + secondNumber);
 
-        int firstInd = firstNumber.length() - 1;
-        int secondInd = secondNumber.length() - 1;
-
-        for(int i = 0; i < 8; i++)
+        if(firstNumber.equals(secondNumber))
         {
-            if(firstNumber.charAt(firstInd) != secondNumber.charAt(secondInd))
-            {
-                return false;
-            }
-
-            firstInd--;
-            secondInd--;
+            return true;
         }
 
-        return true;
+        return false;
+
+        // int firstInd = firstNumber.length() - 1;
+        // int secondInd = secondNumber.length() - 1;
+
+        // for(int i = 0; i < 8; i++)
+        // {
+        //     if(firstNumber.charAt(firstInd) != secondNumber.charAt(secondInd))
+        //     {
+        //         return false;
+        //     }
+
+        //     firstInd--;
+        //     secondInd--;
+        // }
+
+        // return true;
     }
 
     /**
